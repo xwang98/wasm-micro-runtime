@@ -6,10 +6,14 @@
 #include "runtime_sensor.h"
 #include "app_manager_export.h"
 #include "module_wasm_app.h"
+<<<<<<< HEAD
 #include "bh_thread.h"
 #include "bh_time.h"
 #include "bh_common.h"
 #include "bh_assert.h"
+=======
+#include "bh_platform.h"
+>>>>>>> intel/internal/feature
 
 static sys_sensor_t * g_sys_sensors = NULL;
 static int g_sensor_id_max = 0;
@@ -103,11 +107,19 @@ wasm_sensor_config(wasm_exec_env_t exec_env,
                                                     module_inst);
     bh_assert(mod_id != ID_NONE);
 
+<<<<<<< HEAD
     vm_mutex_lock(&s->lock);
 
     c = find_sensor_client(s, mod_id, false);
     if (c == NULL) {
         vm_mutex_unlock(&s->lock);
+=======
+    os_mutex_lock(&s->lock);
+
+    c = find_sensor_client(s, mod_id, false);
+    if (c == NULL) {
+        os_mutex_unlock(&s->lock);
+>>>>>>> intel/internal/feature
         return false;
     }
 
@@ -115,7 +127,11 @@ wasm_sensor_config(wasm_exec_env_t exec_env,
     c->bit_cfg = bit_cfg;
     c->delay = delay;
 
+<<<<<<< HEAD
     vm_mutex_unlock(&s->lock);
+=======
+    os_mutex_unlock(&s->lock);
+>>>>>>> intel/internal/feature
 
     if (s->config != NULL) {
         attr_cont = attr_container_create("config sensor");
@@ -149,19 +165,31 @@ wasm_sensor_open(wasm_exec_env_t exec_env,
                                                         module_inst);
         bh_assert(mod_id != ID_NONE);
 
+<<<<<<< HEAD
         vm_mutex_lock(&s->lock);
+=======
+        os_mutex_lock(&s->lock);
+>>>>>>> intel/internal/feature
 
         c = find_sensor_client(s, mod_id, false);
         if (c) {
             // the app already opened this sensor
+<<<<<<< HEAD
             vm_mutex_unlock(&s->lock);
+=======
+            os_mutex_unlock(&s->lock);
+>>>>>>> intel/internal/feature
             return -1;
         }
 
         sensor_client_t * client = (sensor_client_t*) wasm_runtime_malloc(
                 sizeof(sensor_client_t));
         if (client == NULL) {
+<<<<<<< HEAD
             vm_mutex_unlock(&s->lock);
+=======
+            os_mutex_unlock(&s->lock);
+>>>>>>> intel/internal/feature
             return -1;
         }
 
@@ -172,7 +200,11 @@ wasm_sensor_open(wasm_exec_env_t exec_env,
         client->next = s->clients;
         s->clients = client;
 
+<<<<<<< HEAD
         vm_mutex_unlock(&s->lock);
+=======
+        os_mutex_unlock(&s->lock);
+>>>>>>> intel/internal/feature
 
         refresh_read_interval(s);
 
@@ -218,10 +250,17 @@ wasm_sensor_close(wasm_exec_env_t exec_env, uint32 sensor)
     if (s == NULL)
         return false;
 
+<<<<<<< HEAD
     vm_mutex_lock(&s->lock);
     if ((c = find_sensor_client(s, client_id, true)) != NULL)
         wasm_runtime_free(c);
     vm_mutex_unlock(&s->lock);
+=======
+    os_mutex_lock(&s->lock);
+    if ((c = find_sensor_client(s, client_id, true)) != NULL)
+        wasm_runtime_free(c);
+    os_mutex_unlock(&s->lock);
+>>>>>>> intel/internal/feature
 
     refresh_read_interval(s);
 
@@ -251,7 +290,11 @@ void refresh_read_interval(sensor_obj_t sensor)
 {
     sensor_client_t *c;
     uint32 interval = sensor->default_interval;
+<<<<<<< HEAD
     vm_mutex_lock(&sensor->lock);
+=======
+    os_mutex_lock(&sensor->lock);
+>>>>>>> intel/internal/feature
 
     c = sensor->clients;
     if (c)
@@ -263,7 +306,11 @@ void refresh_read_interval(sensor_obj_t sensor)
         c = c->next;
     }
 
+<<<<<<< HEAD
     vm_mutex_unlock(&sensor->lock);
+=======
+    os_mutex_unlock(&sensor->lock);
+>>>>>>> intel/internal/feature
 
     sensor->read_interval = interval;
 }
@@ -310,7 +357,11 @@ add_sys_sensor(char * name, char * description, int instance,
         g_sys_sensors = s;
     }
 
+<<<<<<< HEAD
     vm_mutex_init(&s->lock);
+=======
+    os_mutex_init(&s->lock);
+>>>>>>> intel/internal/feature
 
     return s;
 }
@@ -366,7 +417,11 @@ sensor_client_t *find_sensor_client(sys_sensor_t * sensor,
 int check_sensor_timers()
 {
     int ms_to_next_check = -1;
+<<<<<<< HEAD
     uint32 now = (uint32) bh_get_tick_ms();
+=======
+    uint32 now = (uint32)bh_get_tick_ms();
+>>>>>>> intel/internal/feature
 
     sys_sensor_t * s = g_sys_sensors;
     while (s) {
@@ -412,11 +467,19 @@ void sensor_cleanup_callback(uint32 module_id)
 
     while (s) {
         sensor_client_t *c;
+<<<<<<< HEAD
         vm_mutex_lock(&s->lock);
         if ((c = find_sensor_client(s, module_id, true)) != NULL) {
             wasm_runtime_free(c);
         }
         vm_mutex_unlock(&s->lock);
+=======
+        os_mutex_lock(&s->lock);
+        if ((c = find_sensor_client(s, module_id, true)) != NULL) {
+            wasm_runtime_free(c);
+        }
+        os_mutex_unlock(&s->lock);
+>>>>>>> intel/internal/feature
         s = s->next;
     }
 }

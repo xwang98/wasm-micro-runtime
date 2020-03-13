@@ -47,6 +47,10 @@
 #include "str.h"
 
 #include "bh_common.h"
+<<<<<<< HEAD
+=======
+#include "bh_assert.h"
+>>>>>>> intel/internal/feature
 
 #if 0 /* TODO: -std=gnu99 causes compile error, comment them first */
 // struct iovec must have the same layout as __wasi_iovec_t.

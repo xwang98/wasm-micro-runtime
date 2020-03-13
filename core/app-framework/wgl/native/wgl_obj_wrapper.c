@@ -6,8 +6,12 @@
 #include "lvgl.h"
 #include "app_manager_export.h"
 #include "module_wasm_app.h"
+<<<<<<< HEAD
 #include "bh_list.h"
 #include "bh_thread.h"
+=======
+#include "bh_platform.h"
+>>>>>>> intel/internal/feature
 #include "wgl_native_utils.h"
 #include "wgl.h"
 
@@ -39,6 +43,13 @@ static korp_mutex g_object_list_mutex;
 
 static bool lv_task_handler_thread_run = true;
 
+<<<<<<< HEAD
+=======
+static korp_mutex task_handler_lock;
+
+static korp_cond task_handler_cond;
+
+>>>>>>> intel/internal/feature
 static void app_mgr_object_event_callback(module_data *m_data, bh_message_t msg)
 {
     uint32 argv[2];
@@ -79,7 +90,11 @@ static void cleanup_object_list(uint32 module_id)
 {
     object_node_t *elem;
 
+<<<<<<< HEAD
     vm_mutex_lock(&g_object_list_mutex);
+=======
+    os_mutex_lock(&g_object_list_mutex);
+>>>>>>> intel/internal/feature
 
     while (true) {
         bool found = false;
@@ -104,7 +119,11 @@ static void cleanup_object_list(uint32 module_id)
             break;
     }
 
+<<<<<<< HEAD
     vm_mutex_unlock(&g_object_list_mutex);
+=======
+    os_mutex_unlock(&g_object_list_mutex);
+>>>>>>> intel/internal/feature
 }
 
 static bool init_object_event_callback_framework()
@@ -128,20 +147,32 @@ bool wgl_native_validate_object(int32 obj_id, lv_obj_t **obj)
 {
     object_node_t *elem;
 
+<<<<<<< HEAD
     vm_mutex_lock(&g_object_list_mutex);
+=======
+    os_mutex_lock(&g_object_list_mutex);
+>>>>>>> intel/internal/feature
 
     elem = (object_node_t *)bh_list_first_elem(&g_object_list);
     while (elem) {
         if (obj_id == elem->obj_id) {
             if (obj != NULL)
                 *obj = elem->obj;
+<<<<<<< HEAD
             vm_mutex_unlock(&g_object_list_mutex);
+=======
+            os_mutex_unlock(&g_object_list_mutex);
+>>>>>>> intel/internal/feature
             return true;
         }
         elem = (object_node_t *) bh_list_elem_next(elem);
     }
 
+<<<<<<< HEAD
     vm_mutex_unlock(&g_object_list_mutex);
+=======
+    os_mutex_unlock(&g_object_list_mutex);
+>>>>>>> intel/internal/feature
 
     return false;
 }
@@ -165,9 +196,15 @@ bool wgl_native_add_object(lv_obj_t *obj, uint32 module_id, uint32 *obj_id)
     node->obj_id = g_obj_id_max;
     node->module_id = module_id;
 
+<<<<<<< HEAD
     vm_mutex_lock(&g_object_list_mutex);
     bh_list_insert(&g_object_list, node);
     vm_mutex_unlock(&g_object_list_mutex);
+=======
+    os_mutex_lock(&g_object_list_mutex);
+    bh_list_insert(&g_object_list, node);
+    os_mutex_unlock(&g_object_list_mutex);
+>>>>>>> intel/internal/feature
 
     if (obj_id != NULL)
         *obj_id = node->obj_id;
@@ -194,20 +231,32 @@ static void _obj_del_recursive(lv_obj_t *obj)
         i = i_next;
     }
 
+<<<<<<< HEAD
     vm_mutex_lock(&g_object_list_mutex);
+=======
+    os_mutex_lock(&g_object_list_mutex);
+>>>>>>> intel/internal/feature
 
     elem = (object_node_t *)bh_list_first_elem(&g_object_list);
     while (elem) {
         if (obj == elem->obj) {
             bh_list_remove(&g_object_list, elem);
             wasm_runtime_free(elem);
+<<<<<<< HEAD
             vm_mutex_unlock(&g_object_list_mutex);
+=======
+            os_mutex_unlock(&g_object_list_mutex);
+>>>>>>> intel/internal/feature
             return;
         }
         elem = (object_node_t *) bh_list_elem_next(elem);
     }
 
+<<<<<<< HEAD
     vm_mutex_unlock(&g_object_list_mutex);
+=======
+    os_mutex_unlock(&g_object_list_mutex);
+>>>>>>> intel/internal/feature
 }
 
 static void _obj_clean_recursive(lv_obj_t *obj)
@@ -255,23 +304,36 @@ static void internal_lv_obj_event_cb(lv_obj_t *obj, lv_event_t event)
 {
     object_node_t *elem;
 
+<<<<<<< HEAD
     vm_mutex_lock(&g_object_list_mutex);
+=======
+    os_mutex_lock(&g_object_list_mutex);
+>>>>>>> intel/internal/feature
 
     elem = (object_node_t *)bh_list_first_elem(&g_object_list);
     while (elem) {
         if (obj == elem->obj) {
             post_widget_msg_to_module(elem, event);
+<<<<<<< HEAD
             vm_mutex_unlock(&g_object_list_mutex);
+=======
+            os_mutex_unlock(&g_object_list_mutex);
+>>>>>>> intel/internal/feature
             return;
         }
         elem = (object_node_t *) bh_list_elem_next(elem);
     }
 
+<<<<<<< HEAD
     vm_mutex_unlock(&g_object_list_mutex);
+=======
+    os_mutex_unlock(&g_object_list_mutex);
+>>>>>>> intel/internal/feature
 }
 
 static void* lv_task_handler_thread_routine (void *arg)
 {
+<<<<<<< HEAD
     korp_sem sem;
 
     if (vm_sem_init(&sem, 1) != 0) {
@@ -286,6 +348,17 @@ static void* lv_task_handler_thread_routine (void *arg)
 
     vm_sem_destroy(&sem);
 
+=======
+    os_mutex_lock(&task_handler_lock);
+
+    while (lv_task_handler_thread_run) {
+        os_cond_reltimedwait(&task_handler_cond, &task_handler_lock,
+                             100 * 1000);
+        lv_task_handler();
+    }
+
+    os_mutex_unlock(&task_handler_lock);
+>>>>>>> intel/internal/feature
     return NULL;
 }
 
@@ -293,6 +366,7 @@ void wgl_init(void)
 {
     korp_thread tid;
 
+<<<<<<< HEAD
     lv_init();
 
     bh_list_init(&g_object_list);
@@ -301,6 +375,24 @@ void wgl_init(void)
 
     /* new a thread, call lv_task_handler periodically */
     vm_thread_create(&tid,
+=======
+    if (os_mutex_init(&task_handler_lock) != 0)
+        return;
+
+    if (os_cond_init(&task_handler_cond) != 0) {
+        os_mutex_destroy(&task_handler_lock);
+        return;
+    }
+
+    lv_init();
+
+    bh_list_init(&g_object_list);
+    os_recursive_mutex_init(&g_object_list_mutex);
+    init_object_event_callback_framework();
+
+    /* new a thread, call lv_task_handler periodically */
+    os_thread_create(&tid,
+>>>>>>> intel/internal/feature
                      lv_task_handler_thread_routine,
                      NULL,
                      BH_APPLET_PRESERVED_STACK_SIZE);
@@ -309,6 +401,11 @@ void wgl_init(void)
 void wgl_exit(void)
 {
     lv_task_handler_thread_run = false;
+<<<<<<< HEAD
+=======
+    os_cond_destroy(&task_handler_cond);
+    os_mutex_destroy(&task_handler_lock);
+>>>>>>> intel/internal/feature
 }
 
 /* -------------------------------------------------------------------------

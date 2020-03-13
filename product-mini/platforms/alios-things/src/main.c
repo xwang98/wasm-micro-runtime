@@ -7,7 +7,10 @@
 #include <string.h>
 #include "bh_platform.h"
 #include "bh_log.h"
+<<<<<<< HEAD
 #include "bh_platform_log.h"
+=======
+>>>>>>> intel/internal/feature
 #include "wasm_export.h"
 #include "test_wasm.h"
 
@@ -35,7 +38,11 @@ app_instance_main(wasm_module_inst_t module_inst)
 
     wasm_application_execute_main(module_inst, app_argc, app_argv);
     if ((exception = wasm_runtime_get_exception(module_inst)))
+<<<<<<< HEAD
         bh_printf("%s\n", exception);
+=======
+        printf("%s\n", exception);
+>>>>>>> intel/internal/feature
     return NULL;
 }
 
@@ -63,7 +70,11 @@ void iwasm_main(void *arg1)
 
     /* initialize runtime environment */
     if (!wasm_runtime_full_init(&init_args)) {
+<<<<<<< HEAD
         bh_printf("Init runtime environment failed.\n");
+=======
+        printf("Init runtime environment failed.\n");
+>>>>>>> intel/internal/feature
         return;
     }
 
@@ -78,7 +89,11 @@ void iwasm_main(void *arg1)
     /* load WASM module */
     if (!(wasm_module = wasm_runtime_load(wasm_file_buf, wasm_file_size,
             error_buf, sizeof(error_buf)))) {
+<<<<<<< HEAD
         bh_printf("%s\n", error_buf);
+=======
+        printf("%s\n", error_buf);
+>>>>>>> intel/internal/feature
         goto fail1;
     }
 
@@ -88,7 +103,11 @@ void iwasm_main(void *arg1)
                                                       8 * 1024,
                                                       error_buf,
                                                       sizeof(error_buf)))) {
+<<<<<<< HEAD
         bh_printf("%s\n", error_buf);
+=======
+        printf("%s\n", error_buf);
+>>>>>>> intel/internal/feature
         goto fail2;
     }
 

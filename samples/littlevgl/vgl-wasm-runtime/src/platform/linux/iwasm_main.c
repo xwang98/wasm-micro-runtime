@@ -24,10 +24,14 @@
 #include "runtime_timer.h"
 #include "native_interface.h"
 #include "app_manager_export.h"
+<<<<<<< HEAD
 #include "bh_common.h"
 #include "bh_queue.h"
 #include "bh_thread.h"
 #include "runtime_sensor.h"
+=======
+#include "bh_platform.h"
+>>>>>>> intel/internal/feature
 #include "bi-inc/attr_container.h"
 #include "module_wasm_app.h"
 #include "wasm_export.h"
@@ -477,12 +481,19 @@ int iwasm_main(int argc, char *argv[])
 
     /* initialize runtime environment */
     if (!wasm_runtime_full_init(&init_args)) {
+<<<<<<< HEAD
         bh_printf("Init runtime environment failed.\n");
+=======
+        printf("Init runtime environment failed.\n");
+>>>>>>> intel/internal/feature
         return -1;
     }
 
     if (!init_connection_framework()) {
+<<<<<<< HEAD
         vm_thread_sys_destroy();
+=======
+>>>>>>> intel/internal/feature
         goto fail1;
     }
 
@@ -496,12 +507,21 @@ int iwasm_main(int argc, char *argv[])
 
 #ifndef CONNECTION_UART
     if (server_mode)
+<<<<<<< HEAD
         vm_thread_create(&tid, func_server_mode, NULL,
         BH_APPLET_PRESERVED_STACK_SIZE);
     else
         vm_thread_create(&tid, func, NULL, BH_APPLET_PRESERVED_STACK_SIZE);
 #else
     vm_thread_create(&tid, func_uart_mode, NULL, BH_APPLET_PRESERVED_STACK_SIZE);
+=======
+        os_thread_create(&tid, func_server_mode, NULL,
+        BH_APPLET_PRESERVED_STACK_SIZE);
+    else
+        os_thread_create(&tid, func, NULL, BH_APPLET_PRESERVED_STACK_SIZE);
+#else
+    os_thread_create(&tid, func_uart_mode, NULL, BH_APPLET_PRESERVED_STACK_SIZE);
+>>>>>>> intel/internal/feature
 #endif
 
     app_manager_startup(&interface);

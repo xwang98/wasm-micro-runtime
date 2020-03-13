@@ -11,6 +11,10 @@
 #include "bh_platform.h"
 #include "bh_assert.h"
 #include "bh_log.h"
+<<<<<<< HEAD
+=======
+#include "bh_read_file.h"
+>>>>>>> intel/internal/feature
 #include "wasm_export.h"
 
 static int app_argc;
@@ -18,6 +22,7 @@ static char **app_argv;
 
 static int print_help()
 {
+<<<<<<< HEAD
     bh_printf("Usage: iwasm [-options] wasm_file [args...]\n");
     bh_printf("options:\n");
     bh_printf("  -f|--function name     Specify function name to run in module\n"
@@ -37,6 +42,27 @@ static int print_help()
     bh_printf("  --dir=<dir>            Grant wasi access to the given host directories\n");
     bh_printf("                         to the program, for example:\n");
     bh_printf("                           --dir=<dir1> --dir=<dir2>\n");
+=======
+    printf("Usage: iwasm [-options] wasm_file [args...]\n");
+    printf("options:\n");
+    printf("  -f|--function name     Specify function name to run in module\n"
+           "                         rather than main\n");
+#if WASM_ENABLE_LOG != 0
+    printf("  -v=n                   Set log verbose level (0 to 5, default is 2),\n"
+           "                         larger level with more log\n");
+#endif
+    printf("  --stack-size=n         Set maximum stack size in bytes, default is 16 KB\n");
+    printf("  --heap-size=n          Set maximum heap size in bytes, default is 16 KB\n");
+    printf("  --repl                 Start a very simple REPL (read-eval-print-loop) mode\n"
+           "                         that runs commands in the form of `FUNC ARG...`\n");
+#if WASM_ENABLE_LIBC_WASI != 0
+    printf("  --env=<env>            Pass wasi environment variables with \"key=value\"\n");
+    printf("                         to the program, for example:\n");
+    printf("                           --env=\"key1=value1\" --env=\"key2=value2\"\n");
+    printf("  --dir=<dir>            Grant wasi access to the given host directories\n");
+    printf("                         to the program, for example:\n");
+    printf("                           --dir=<dir1> --dir=<dir2>\n");
+>>>>>>> intel/internal/feature
 #endif
 
     return 1;
@@ -49,7 +75,11 @@ app_instance_main(wasm_module_inst_t module_inst)
 
     wasm_application_execute_main(module_inst, app_argc, app_argv);
     if ((exception = wasm_runtime_get_exception(module_inst)))
+<<<<<<< HEAD
         bh_printf("%s\n", exception);
+=======
+        printf("%s\n", exception);
+>>>>>>> intel/internal/feature
     return NULL;
 }
 
@@ -100,7 +130,11 @@ app_instance_repl(wasm_module_inst_t module_inst)
     size_t len = 0;
     ssize_t n;
 
+<<<<<<< HEAD
     while ((bh_printf("webassembly> "), n = getline(&cmd, &len, stdin)) != -1) {
+=======
+    while ((printf("webassembly> "), n = getline(&cmd, &len, stdin)) != -1) {
+>>>>>>> intel/internal/feature
         bh_assert(n > 0);
         if (cmd[n - 1] == '\n') {
             if (n == 1)
@@ -204,8 +238,13 @@ int main(int argc, char *argv[])
             if (argv[0][6] == '\0')
                 return print_help();
             if (dir_list_size >= sizeof(dir_list) / sizeof(char*)) {
+<<<<<<< HEAD
                 bh_printf("Only allow max dir number %d\n",
                           (int)(sizeof(dir_list) / sizeof(char*)));
+=======
+                printf("Only allow max dir number %d\n",
+                       (int)(sizeof(dir_list) / sizeof(char*)));
+>>>>>>> intel/internal/feature
                 return -1;
             }
             dir_list[dir_list_size++] = argv[0] + 6;
@@ -216,16 +255,26 @@ int main(int argc, char *argv[])
             if (argv[0][6] == '\0')
                 return print_help();
             if (env_list_size >= sizeof(env_list) / sizeof(char*)) {
+<<<<<<< HEAD
                 bh_printf("Only allow max env number %d\n",
                           (int)(sizeof(env_list) / sizeof(char*)));
+=======
+                printf("Only allow max env number %d\n",
+                       (int)(sizeof(env_list) / sizeof(char*)));
+>>>>>>> intel/internal/feature
                 return -1;
             }
             tmp_env = argv[0] + 6;
             if (validate_env_str(tmp_env))
                 env_list[env_list_size++] = tmp_env;
             else {
+<<<<<<< HEAD
                 bh_printf("Wasm parse env string failed: expect \"key=value\", got \"%s\"\n",
                           tmp_env);
+=======
+                printf("Wasm parse env string failed: expect \"key=value\", got \"%s\"\n",
+                       tmp_env);
+>>>>>>> intel/internal/feature
                 return print_help();
             }
         }
@@ -256,7 +305,11 @@ int main(int argc, char *argv[])
 
     /* initialize runtime environment */
     if (!wasm_runtime_full_init(&init_args)) {
+<<<<<<< HEAD
         bh_printf("Init runtime environment failed.\n");
+=======
+        printf("Init runtime environment failed.\n");
+>>>>>>> intel/internal/feature
         return -1;
     }
 
@@ -270,7 +323,11 @@ int main(int argc, char *argv[])
     /* load WASM module */
     if (!(wasm_module = wasm_runtime_load(wasm_file_buf, wasm_file_size,
                                           error_buf, sizeof(error_buf)))) {
+<<<<<<< HEAD
         bh_printf("%s\n", error_buf);
+=======
+        printf("%s\n", error_buf);
+>>>>>>> intel/internal/feature
         goto fail2;
     }
 
@@ -288,7 +345,11 @@ int main(int argc, char *argv[])
                                                       heap_size,
                                                       error_buf,
                                                       sizeof(error_buf)))) {
+<<<<<<< HEAD
         bh_printf("%s\n", error_buf);
+=======
+        printf("%s\n", error_buf);
+>>>>>>> intel/internal/feature
         goto fail3;
     }
 

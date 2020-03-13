@@ -388,7 +388,11 @@ sprintf_out(int c, struct str_context *ctx)
 static int
 printf_out(int c, struct str_context *ctx)
 {
+<<<<<<< HEAD
     bh_printf("%c", c);
+=======
+    os_printf("%c", c);
+>>>>>>> intel/internal/feature
     ctx->count++;
     return c;
 }
@@ -470,13 +474,21 @@ snprintf_wrapper(wasm_exec_env_t exec_env, char *str, uint32 size,
 static int
 puts_wrapper(wasm_exec_env_t exec_env, const char *str)
 {
+<<<<<<< HEAD
     return bh_printf("%s\n", str);
+=======
+    return os_printf("%s\n", str);
+>>>>>>> intel/internal/feature
 }
 
 static int
 putchar_wrapper(wasm_exec_env_t exec_env, int c)
 {
+<<<<<<< HEAD
     bh_printf("%c", c);
+=======
+    os_printf("%c", c);
+>>>>>>> intel/internal/feature
     return 1;
 }
 
@@ -908,7 +920,11 @@ static void
 llvm_stackrestore_wrapper(wasm_exec_env_t exec_env, uint32 llvm_stack)
 {
     wasm_module_inst_t module_inst = get_module_inst(exec_env);
+<<<<<<< HEAD
     bh_printf("_llvm_stackrestore called!\n");
+=======
+    os_printf("_llvm_stackrestore called!\n");
+>>>>>>> intel/internal/feature
     wasm_runtime_set_llvm_stack(module_inst, llvm_stack);
 }
 
@@ -916,7 +932,11 @@ static uint32
 llvm_stacksave_wrapper(wasm_exec_env_t exec_env)
 {
     wasm_module_inst_t module_inst = get_module_inst(exec_env);
+<<<<<<< HEAD
     bh_printf("_llvm_stacksave called!\n");
+=======
+    os_printf("_llvm_stacksave called!\n");
+>>>>>>> intel/internal/feature
     return wasm_runtime_get_llvm_stack(module_inst);
 }
 
@@ -996,7 +1016,11 @@ __cxa_throw_wrapper(wasm_exec_env_t exec_env,
 static void
 print_i32_wrapper(wasm_exec_env_t exec_env, int32 i32)
 {
+<<<<<<< HEAD
     bh_printf("%d\n", i32);
+=======
+    os_printf("%d\n", i32);
+>>>>>>> intel/internal/feature
 }
 
 #define REG_NATIVE_FUNC(func_name, signature)  \

@@ -29,10 +29,15 @@ app_instance_main(wasm_module_inst_t module_inst)
 
 extern "C" {
 
+<<<<<<< HEAD
 int bh_printf(const char *message, ...);
 
 typedef void (*bh_print_function_t)(const char* message);
 extern void bh_set_print_function(bh_print_function_t pf);
+=======
+typedef void (*os_print_function_t)(const char* message);
+extern void os_set_print_function(os_print_function_t pf);
+>>>>>>> intel/internal/feature
 
 void enclave_print(const char *message)
 {
@@ -43,7 +48,11 @@ void enclave_print(const char *message)
 
 void ecall_iwasm_main()
 {
+<<<<<<< HEAD
     bh_set_print_function(enclave_print);
+=======
+    os_set_print_function(enclave_print);
+>>>>>>> intel/internal/feature
 
     uint8_t *wasm_file_buf = NULL;
     int wasm_file_size;

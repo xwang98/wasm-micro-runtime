@@ -6,7 +6,10 @@
 #ifndef _WASM_EXEC_ENV_H
 #define _WASM_EXEC_ENV_H
 
+<<<<<<< HEAD
 #include "bh_thread.h"
+=======
+>>>>>>> intel/internal/feature
 #include "bh_assert.h"
 #if WASM_ENABLE_INTERP != 0
 #include "../interpreter/wasm.h"

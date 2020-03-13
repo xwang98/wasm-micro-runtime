@@ -8,7 +8,10 @@
 #include "bh_platform.h"
 #include "bh_assert.h"
 #include "bh_log.h"
+<<<<<<< HEAD
 #include "bh_platform_log.h"
+=======
+>>>>>>> intel/internal/feature
 #include "wasm_export.h"
 
 extern int iwasm_main();

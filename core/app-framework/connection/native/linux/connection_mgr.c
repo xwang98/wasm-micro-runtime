@@ -11,14 +11,21 @@
  */
 
 #include "connection_lib.h"
+<<<<<<< HEAD
 #include "bh_thread.h"
+=======
+#include "bh_platform.h"
+>>>>>>> intel/internal/feature
 #include "app_manager_export.h"
 #include "module_wasm_app.h"
 #include "conn_tcp.h"
 #include "conn_udp.h"
 #include "conn_uart.h"
+<<<<<<< HEAD
 #include "bh_common.h"
 #include "bh_assert.h"
+=======
+>>>>>>> intel/internal/feature
 
 #include <unistd.h>
 #include <sys/epoll.h>
@@ -96,7 +103,11 @@ connection_interface_t connection_impl = {
 
 static void add_connection(sys_connection_t *conn)
 {
+<<<<<<< HEAD
     vm_mutex_lock(&g_lock);
+=======
+    os_mutex_lock(&g_lock);
+>>>>>>> intel/internal/feature
 
     g_handle_max++;
     if (g_handle_max == -1)
@@ -110,7 +121,11 @@ static void add_connection(sys_connection_t *conn)
         g_connections = conn;
     }
 
+<<<<<<< HEAD
     vm_mutex_unlock(&g_lock);
+=======
+    os_mutex_unlock(&g_lock);
+>>>>>>> intel/internal/feature
 }
 
 #define FREE_CONNECTION(conn) do {      \
@@ -124,7 +139,11 @@ static int get_app_conns_num(uint32 module_id)
     sys_connection_t *conn;
     int num = 0;
 
+<<<<<<< HEAD
     vm_mutex_lock(&g_lock);
+=======
+    os_mutex_lock(&g_lock);
+>>>>>>> intel/internal/feature
 
     conn = g_connections;
     while (conn) {
@@ -133,7 +152,11 @@ static int get_app_conns_num(uint32 module_id)
         conn = conn->next;
     }
 
+<<<<<<< HEAD
     vm_mutex_unlock(&g_lock);
+=======
+    os_mutex_unlock(&g_lock);
+>>>>>>> intel/internal/feature
 
     return num;
 }
@@ -142,7 +165,11 @@ static sys_connection_t *find_connection(uint32 handle, bool remove_found)
 {
     sys_connection_t *conn, *prev = NULL;
 
+<<<<<<< HEAD
     vm_mutex_lock(&g_lock);
+=======
+    os_mutex_lock(&g_lock);
+>>>>>>> intel/internal/feature
 
     conn = g_connections;
     while (conn) {
@@ -154,7 +181,11 @@ static sys_connection_t *find_connection(uint32 handle, bool remove_found)
                     g_connections = conn->next;
                 }
             }
+<<<<<<< HEAD
             vm_mutex_unlock(&g_lock);
+=======
+            os_mutex_unlock(&g_lock);
+>>>>>>> intel/internal/feature
             return conn;
         } else {
             prev = conn;
@@ -162,7 +193,11 @@ static sys_connection_t *find_connection(uint32 handle, bool remove_found)
         }
     }
 
+<<<<<<< HEAD
     vm_mutex_unlock(&g_lock);
+=======
+    os_mutex_unlock(&g_lock);
+>>>>>>> intel/internal/feature
 
     return NULL;
 }
@@ -171,7 +206,11 @@ static void cleanup_connections(uint32 module_id)
 {
     sys_connection_t *conn, *prev = NULL;
 
+<<<<<<< HEAD
     vm_mutex_lock(&g_lock);
+=======
+    os_mutex_lock(&g_lock);
+>>>>>>> intel/internal/feature
 
     conn = g_connections;
     while (conn) {
@@ -194,7 +233,11 @@ static void cleanup_connections(uint32 module_id)
         }
     }
 
+<<<<<<< HEAD
     vm_mutex_unlock(&g_lock);
+=======
+    os_mutex_unlock(&g_lock);
+>>>>>>> intel/internal/feature
 }
 
 static conn_type_t get_conn_type(const char *name)
@@ -552,7 +595,11 @@ bool init_connection_framework()
     if (epollfd == -1)
         return false;
 
+<<<<<<< HEAD
     if (vm_mutex_init(&g_lock) != 0) {
+=======
+    if (os_mutex_init(&g_lock) != 0) {
+>>>>>>> intel/internal/feature
         close(epollfd);
         return false;
     }
@@ -566,7 +613,11 @@ bool init_connection_framework()
         goto fail;
     }
 
+<<<<<<< HEAD
     if (vm_thread_create(&tid,
+=======
+    if (os_thread_create(&tid,
+>>>>>>> intel/internal/feature
                          polling_thread_routine,
                          NULL,
                          BH_APPLET_PRESERVED_STACK_SIZE) != 0) {
@@ -576,7 +627,11 @@ bool init_connection_framework()
     return true;
 
 fail:
+<<<<<<< HEAD
     vm_mutex_destroy(&g_lock);
+=======
+    os_mutex_destroy(&g_lock);
+>>>>>>> intel/internal/feature
     close(epollfd);
     return false;
 }

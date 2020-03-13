@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
  */
 
+<<<<<<< HEAD
 #include "config.h"
+=======
+>>>>>>> intel/internal/feature
 #include "bh_platform.h"
 #include "bh_common.h"
 #include "bh_assert.h"
@@ -30,6 +33,7 @@ wasm_runtime_env_init()
     if (bh_platform_init() != 0)
         return false;
 
+<<<<<<< HEAD
     if (bh_log_init() != 0)
         return false;
 
@@ -38,6 +42,12 @@ wasm_runtime_env_init()
 
     if (wasm_native_init() == false)
         return false;
+=======
+    if (wasm_native_init() == false) {
+        bh_platform_destroy();
+        return false;
+    }
+>>>>>>> intel/internal/feature
 
     return true;
 }
@@ -60,7 +70,11 @@ void
 wasm_runtime_destroy()
 {
     wasm_native_destroy();
+<<<<<<< HEAD
     vm_thread_sys_destroy();
+=======
+    bh_platform_destroy();
+>>>>>>> intel/internal/feature
     wasm_runtime_memory_destroy();
 }
 
@@ -273,7 +287,11 @@ wasm_runtime_call_wasm(WASMExecEnv *exec_env,
         return false;
     }
 
+<<<<<<< HEAD
     exec_env->handle = vm_self_thread();
+=======
+    exec_env->handle = os_self_thread();
+>>>>>>> intel/internal/feature
 
 #if WASM_ENABLE_INTERP != 0
     if (exec_env->module_inst->module_type == Wasm_Module_Bytecode)
@@ -1375,7 +1393,11 @@ wasm_application_execute_func(WASMModuleInstanceCommon *module_inst,
     /* print return value */
     switch (type->types[type->param_count]) {
         case VALUE_TYPE_I32:
+<<<<<<< HEAD
             bh_printf("0x%x:i32", argv1[0]);
+=======
+            os_printf("0x%x:i32", argv1[0]);
+>>>>>>> intel/internal/feature
             break;
         case VALUE_TYPE_I64:
         {
@@ -1387,22 +1409,38 @@ wasm_application_execute_func(WASMModuleInstanceCommon *module_inst,
                 snprintf(buf, sizeof(buf), "%s", "0x%llx:i64");
             else
                 snprintf(buf, sizeof(buf), "%s", "0x%lx:i64");
+<<<<<<< HEAD
             bh_printf(buf, u.val);
             break;
         }
         case VALUE_TYPE_F32:
             bh_printf("%.7g:f32", *(float32*)argv1);
+=======
+            os_printf(buf, u.val);
+            break;
+        }
+        case VALUE_TYPE_F32:
+            os_printf("%.7g:f32", *(float32*)argv1);
+>>>>>>> intel/internal/feature
         break;
         case VALUE_TYPE_F64:
         {
             union { float64 val; uint32 parts[2]; } u;
             u.parts[0] = argv1[0];
             u.parts[1] = argv1[1];
+<<<<<<< HEAD
             bh_printf("%.7g:f64", u.val);
             break;
         }
     }
     bh_printf("\n");
+=======
+            os_printf("%.7g:f64", u.val);
+            break;
+        }
+    }
+    os_printf("\n");
+>>>>>>> intel/internal/feature
 
     wasm_runtime_free(argv1);
     return true;
@@ -1413,7 +1451,11 @@ fail:
 
     exception = wasm_runtime_get_exception(module_inst);
     bh_assert(exception);
+<<<<<<< HEAD
     bh_printf("%s\n", exception);
+=======
+    os_printf("%s\n", exception);
+>>>>>>> intel/internal/feature
     return false;
 }
 

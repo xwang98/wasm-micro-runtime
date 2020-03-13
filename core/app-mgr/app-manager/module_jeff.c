@@ -269,12 +269,20 @@ check_exception()
         jeff_runtime_call_java(method, argc, argv, argt);
 
         if (is_wd_started) {
+<<<<<<< HEAD
             vm_mutex_lock(&wd_timer->lock);
+=======
+            os_mutex_lock(&wd_timer->lock);
+>>>>>>> intel/internal/feature
             if (!wd_timer->is_interrupting) {
                 wd_timer->is_stopped = true;
                 watchdog_timer_stop(wd_timer);
             }
+<<<<<<< HEAD
             vm_mutex_unlock(&wd_timer->lock);
+=======
+            os_mutex_unlock(&wd_timer->lock);
+>>>>>>> intel/internal/feature
         }
 
         return !check_exception();
@@ -1395,7 +1403,11 @@ check_exception()
 
         if (applet_data->vm_instance->main_file) {
             app_manager_printf("Watchdog cancel applet main thread.\n");
+<<<<<<< HEAD
             vm_thread_cancel(applet_data->vm_instance->main_tlr.handle);
+=======
+            os_thread_cancel(applet_data->vm_instance->main_tlr.handle);
+>>>>>>> intel/internal/feature
             /* k_thread_abort(applet_data->vm_instance->main_tlr.handle); */
         }
 

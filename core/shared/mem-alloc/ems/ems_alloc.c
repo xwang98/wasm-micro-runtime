@@ -20,7 +20,11 @@ static int hmu_is_in_heap(gc_heap_t* heap, hmu_t* hmu)
 /* Node @p will be removed from the tree and left,right,parent pointers of node @p will be*/
 /*  set to be NULL. Other fields will not be touched.*/
 /* The tree will be re-organized so that the order conditions are still satisified.*/
+<<<<<<< HEAD
 BH_STATIC void remove_tree_node(hmu_tree_node_t *p)
+=======
+static void remove_tree_node(hmu_tree_node_t *p)
+>>>>>>> intel/internal/feature
 {
     hmu_tree_node_t *q = NULL, **slot = NULL;
 
@@ -104,7 +108,11 @@ static void unlink_hmu(gc_heap_t *heap, hmu_t *hmu)
         }
 
         if (!node) {
+<<<<<<< HEAD
             bh_printf("[GC_ERROR]couldn't find the node in the normal list");
+=======
+            os_printf("[GC_ERROR]couldn't find the node in the normal list");
+>>>>>>> intel/internal/feature
         }
     } else {
         remove_tree_node((hmu_tree_node_t *) hmu);
@@ -197,7 +205,11 @@ void gci_add_fc(gc_heap_t *heap, hmu_t *hmu, gc_size_t size)
 
 /* A proper HMU will be returned. This HMU can include the header and given size. The returned HMU will be aligned to 8 bytes.*/
 /* NULL will be returned if there are no proper HMU.*/
+<<<<<<< HEAD
 BH_STATIC hmu_t *alloc_hmu(gc_heap_t *heap, gc_size_t size)
+=======
+static hmu_t *alloc_hmu(gc_heap_t *heap, gc_size_t size)
+>>>>>>> intel/internal/feature
 {
     hmu_normal_node_t *node = NULL, *p = NULL;
     uint32 node_idx = 0, init_node_idx = 0;
@@ -316,7 +328,11 @@ BH_STATIC hmu_t *alloc_hmu(gc_heap_t *heap, gc_size_t size)
 
 /* A proper HMU will be returned. This HMU can include the header and given size. The returned HMU will be aligned to 8 bytes.*/
 /* NULL will be returned if there are no proper HMU.*/
+<<<<<<< HEAD
 BH_STATIC hmu_t* alloc_hmu_ex(gc_heap_t *heap, gc_size_t size)
+=======
+static hmu_t* alloc_hmu_ex(gc_heap_t *heap, gc_size_t size)
+>>>>>>> intel/internal/feature
 {
     hmu_t *ret = NULL;
 
@@ -378,7 +394,11 @@ gc_object_t _gc_alloc_vo_i_heap(void *vheap,
     ret = hmu_to_obj(hmu);
 
 #if BH_ENABLE_MEMORY_PROFILING != 0
+<<<<<<< HEAD
     bh_printf("HEAP.ALLOC: heap: %p, size: %u", heap, size);
+=======
+    os_printf("HEAP.ALLOC: heap: %p, size: %u", heap, size);
+>>>>>>> intel/internal/feature
 #endif
 
 FINISH:
@@ -428,7 +448,11 @@ gc_object_t _gc_realloc_vo_i_heap(void *vheap, void *ptr,
     ret = hmu_to_obj(hmu);
 
 #if BH_ENABLE_MEMORY_PROFILING != 0
+<<<<<<< HEAD
     bh_printf("HEAP.ALLOC: heap: %p, size: %u", heap, size);
+=======
+    os_printf("HEAP.ALLOC: heap: %p, size: %u", heap, size);
+>>>>>>> intel/internal/feature
 #endif
 
 FINISH:
@@ -478,7 +502,11 @@ gc_object_t _gc_alloc_jo_i_heap(void *vheap,
     ret = hmu_to_obj(hmu);
 
 #if BH_ENABLE_MEMORY_PROFILING != 0
+<<<<<<< HEAD
     bh_printf("HEAP.ALLOC: heap: %p, size: %u", heap, size);
+=======
+    os_printf("HEAP.ALLOC: heap: %p, size: %u", heap, size);
+>>>>>>> intel/internal/feature
 #endif
 
     FINISH:
@@ -539,7 +567,11 @@ int gc_free_i_heap(void *vheap, gc_object_t obj ALLOC_EXTRA_PARAMETERS)
             heap->total_free_size += size;
 #endif
 #if BH_ENABLE_MEMORY_PROFILING != 0
+<<<<<<< HEAD
             bh_printf("HEAP.FREE, heap: %p, size: %u\n",heap, size);
+=======
+            os_printf("HEAP.FREE, heap: %p, size: %u\n",heap, size);
+>>>>>>> intel/internal/feature
 #endif
 
             if (!hmu_get_pinuse(hmu)) {
@@ -582,12 +614,21 @@ int gc_free_i_heap(void *vheap, gc_object_t obj ALLOC_EXTRA_PARAMETERS)
 
 void gc_dump_heap_stats(gc_heap_t *heap)
 {
+<<<<<<< HEAD
     bh_printf("heap: %p, heap start: %p\n", heap, heap->base_addr);
     bh_printf(
             "total malloc: totalfree: %u, current: %u, highmark: %u, gc cnt: %u\n",
             heap->total_free_size, heap->current_size, heap->highmark_size,
             heap->total_gc_count);
     bh_printf("g_total_malloc=%lu, g_total_free=%lu, occupied=%lu\n",
+=======
+    os_printf("heap: %p, heap start: %p\n", heap, heap->base_addr);
+    os_printf(
+            "total malloc: totalfree: %u, current: %u, highmark: %u, gc cnt: %u\n",
+            heap->total_free_size, heap->current_size, heap->highmark_size,
+            heap->total_gc_count);
+    os_printf("g_total_malloc=%lu, g_total_free=%lu, occupied=%lu\n",
+>>>>>>> intel/internal/feature
             g_total_malloc, g_total_free, g_total_malloc - g_total_free);
 }
 

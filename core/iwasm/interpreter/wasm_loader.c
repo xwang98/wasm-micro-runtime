@@ -2311,7 +2311,11 @@ wasm_loader_find_block_addr(BlockAddr *block_addr_cache,
 #if WASM_ENABLE_FAST_INTERP != 0
 
 #if WASM_DEBUG_PREPROCESSOR != 0
+<<<<<<< HEAD
 #define LOG_OP(...)       bh_printf(__VA_ARGS__)
+=======
+#define LOG_OP(...)       os_printf(__VA_ARGS__)
+>>>>>>> intel/internal/feature
 #else
 #define LOG_OP(...)
 #endif
@@ -4175,11 +4179,36 @@ handle_next_reachable_block:
             case WASM_OP_F32_STORE:
             case WASM_OP_F64_STORE:
             {
+<<<<<<< HEAD
+=======
+#if WASM_ENABLE_FAST_INTERP != 0
+                /* change F32/F64 into I32/I64 */
+                if (opcode == WASM_OP_F32_LOAD) {
+                    skip_label();
+                    emit_label(WASM_OP_I32_LOAD);
+                }
+                else if (opcode == WASM_OP_F64_LOAD) {
+                    skip_label();
+                    emit_label(WASM_OP_I64_LOAD);
+                }
+                else if (opcode == WASM_OP_F32_STORE) {
+                    skip_label();
+                    emit_label(WASM_OP_I32_STORE);
+                }
+                else if (opcode == WASM_OP_F64_STORE) {
+                    skip_label();
+                    emit_label(WASM_OP_I64_STORE);
+                }
+#endif
+>>>>>>> intel/internal/feature
                 CHECK_MEMORY();
                 read_leb_uint32(p, p_end, align); /* align */
                 read_leb_uint32(p, p_end, mem_offset); /* offset */
 #if WASM_ENABLE_FAST_INTERP != 0
+<<<<<<< HEAD
                 emit_byte(loader_ctx, opcode);
+=======
+>>>>>>> intel/internal/feature
                 emit_const(mem_offset);
 #endif
                 switch (opcode)

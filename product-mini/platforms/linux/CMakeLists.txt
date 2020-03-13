@@ -81,7 +81,13 @@ endif ()
 #set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector-strong --param ssp-buffer-size=4")
 #set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-z,noexecstack,-z,relro,-z,now")
 
+<<<<<<< HEAD
 add_executable (iwasm main.c)
+=======
+include (${SHARED_DIR}/utils/uncommon/shared_uncommon.cmake)
+
+add_executable (iwasm main.c ${UNCOMMON_SHARED_SOURCE})
+>>>>>>> intel/internal/feature
 
 install (TARGETS iwasm DESTINATION bin)
 

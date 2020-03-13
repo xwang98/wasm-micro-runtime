@@ -8,7 +8,10 @@
 
 #include "bh_platform.h"
 #include "bh_common.h"
+<<<<<<< HEAD
 #include "bh_thread.h"
+=======
+>>>>>>> intel/internal/feature
 #include "wasm_exec_env.h"
 #include "wasm_native.h"
 #include "../include/wasm_export.h"

@@ -4,9 +4,12 @@
  */
 
 #include "bh_hashmap.h"
+<<<<<<< HEAD
 #include "bh_log.h"
 #include "bh_thread.h"
 
+=======
+>>>>>>> intel/internal/feature
 
 typedef struct HashMapElem {
     void *key;
@@ -65,7 +68,11 @@ bh_hash_map_create(uint32 size, bool use_lock,
         map->lock = (korp_mutex*)
                     ((uint8*)map + offsetof(HashMap, elements)
                      + sizeof(HashMapElem) * size);
+<<<<<<< HEAD
         if (vm_mutex_init(map->lock)) {
+=======
+        if (os_mutex_init(map->lock)) {
+>>>>>>> intel/internal/feature
             LOG_ERROR("HashMap create failed: init map lock failed.\n");
             BH_FREE(map);
             return NULL;
@@ -92,7 +99,11 @@ bh_hash_map_insert(HashMap *map, void *key, void *value)
     }
 
     if (map->lock) {
+<<<<<<< HEAD
         vm_mutex_lock(map->lock);
+=======
+        os_mutex_lock(map->lock);
+>>>>>>> intel/internal/feature
     }
 
     index = map->hash_func(key) % map->size;
@@ -116,13 +127,21 @@ bh_hash_map_insert(HashMap *map, void *key, void *value)
     map->elements[index] = elem;
 
     if (map->lock) {
+<<<<<<< HEAD
         vm_mutex_unlock(map->lock);
+=======
+        os_mutex_unlock(map->lock);
+>>>>>>> intel/internal/feature
     }
     return true;
 
 fail:
     if (map->lock) {
+<<<<<<< HEAD
         vm_mutex_unlock(map->lock);
+=======
+        os_mutex_unlock(map->lock);
+>>>>>>> intel/internal/feature
     }
     return false;
 }
@@ -140,7 +159,11 @@ bh_hash_map_find(HashMap *map, void *key)
     }
 
     if (map->lock) {
+<<<<<<< HEAD
         vm_mutex_lock(map->lock);
+=======
+        os_mutex_lock(map->lock);
+>>>>>>> intel/internal/feature
     }
 
     index = map->hash_func(key) % map->size;
@@ -150,7 +173,11 @@ bh_hash_map_find(HashMap *map, void *key)
         if (map->key_equal_func(elem->key, key)) {
             value = elem->value;
             if (map->lock) {
+<<<<<<< HEAD
                 vm_mutex_unlock(map->lock);
+=======
+                os_mutex_unlock(map->lock);
+>>>>>>> intel/internal/feature
             }
             return value;
         }
@@ -158,7 +185,11 @@ bh_hash_map_find(HashMap *map, void *key)
     }
 
     if (map->lock) {
+<<<<<<< HEAD
         vm_mutex_unlock(map->lock);
+=======
+        os_mutex_unlock(map->lock);
+>>>>>>> intel/internal/feature
     }
     return NULL;
 }
@@ -176,7 +207,11 @@ bh_hash_map_update(HashMap *map, void *key, void *value,
     }
 
     if (map->lock) {
+<<<<<<< HEAD
         vm_mutex_lock(map->lock);
+=======
+        os_mutex_lock(map->lock);
+>>>>>>> intel/internal/feature
     }
 
     index = map->hash_func(key) % map->size;
@@ -188,7 +223,11 @@ bh_hash_map_update(HashMap *map, void *key, void *value,
                 *p_old_value = elem->value;
             elem->value = value;
             if (map->lock) {
+<<<<<<< HEAD
                 vm_mutex_unlock(map->lock);
+=======
+                os_mutex_unlock(map->lock);
+>>>>>>> intel/internal/feature
             }
             return true;
     }
@@ -196,7 +235,11 @@ bh_hash_map_update(HashMap *map, void *key, void *value,
     }
 
     if (map->lock) {
+<<<<<<< HEAD
         vm_mutex_unlock(map->lock);
+=======
+        os_mutex_unlock(map->lock);
+>>>>>>> intel/internal/feature
     }
     return false;
 }
@@ -214,7 +257,11 @@ bh_hash_map_remove(HashMap *map, void *key,
     }
 
     if (map->lock) {
+<<<<<<< HEAD
         vm_mutex_lock(map->lock);
+=======
+        os_mutex_lock(map->lock);
+>>>>>>> intel/internal/feature
     }
 
     index = map->hash_func(key) % map->size;
@@ -235,7 +282,11 @@ bh_hash_map_remove(HashMap *map, void *key,
             BH_FREE(elem);
 
             if (map->lock) {
+<<<<<<< HEAD
                 vm_mutex_unlock(map->lock);
+=======
+                os_mutex_unlock(map->lock);
+>>>>>>> intel/internal/feature
             }
             return true;
         }
@@ -245,7 +296,11 @@ bh_hash_map_remove(HashMap *map, void *key,
     }
 
     if (map->lock) {
+<<<<<<< HEAD
         vm_mutex_unlock(map->lock);
+=======
+        os_mutex_unlock(map->lock);
+>>>>>>> intel/internal/feature
     }
     return false;
 }
@@ -262,7 +317,11 @@ bh_hash_map_destroy(HashMap *map)
     }
 
     if (map->lock) {
+<<<<<<< HEAD
         vm_mutex_lock(map->lock);
+=======
+        os_mutex_lock(map->lock);
+>>>>>>> intel/internal/feature
     }
 
     for (index = 0; index < map->size; index++) {
@@ -283,8 +342,13 @@ bh_hash_map_destroy(HashMap *map)
     }
 
     if (map->lock) {
+<<<<<<< HEAD
         vm_mutex_unlock(map->lock);
         vm_mutex_destroy(map->lock);
+=======
+        os_mutex_unlock(map->lock);
+        os_mutex_destroy(map->lock);
+>>>>>>> intel/internal/feature
     }
     BH_FREE(map);
     return true;

@@ -3,9 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
  */
 
+<<<<<<< HEAD
 #include "bh_common.h"
 #include "bh_queue.h"
 #include "bh_thread.h"
+=======
+#include "bh_platform.h"
+>>>>>>> intel/internal/feature
 #include "runtime_sensor.h"
 #include "bi-inc/attr_container.h"
 #include "module_wasm_app.h"
@@ -91,15 +95,25 @@ static void thread_sensor_check(void * arg)
         int ms_to_expiry = check_sensor_timers();
         if (ms_to_expiry == -1)
             ms_to_expiry = 5000;
+<<<<<<< HEAD
         vm_mutex_lock(&mutex);
         vm_cond_reltimedwait(&cond, &mutex, ms_to_expiry);
         vm_mutex_unlock(&mutex);
+=======
+        os_mutex_lock(&mutex);
+        os_cond_reltimedwait(&cond, &mutex, ms_to_expiry * 1000);
+        os_mutex_unlock(&mutex);
+>>>>>>> intel/internal/feature
     }
 }
 
 static void cb_wakeup_thread()
 {
+<<<<<<< HEAD
     vm_cond_signal(&cond);
+=======
+    os_cond_signal(&cond);
+>>>>>>> intel/internal/feature
 }
 
 void set_sensor_reshceduler(void (*callback)());
@@ -107,8 +121,13 @@ void set_sensor_reshceduler(void (*callback)());
 void init_sensor_framework()
 {
     // init the mutext and conditions
+<<<<<<< HEAD
     vm_cond_init(&cond);
     vm_mutex_init(&mutex);
+=======
+    os_cond_init(&cond);
+    os_mutex_init(&mutex);
+>>>>>>> intel/internal/feature
 
 
     set_sensor_reshceduler(cb_wakeup_thread);
@@ -125,7 +144,11 @@ void start_sensor_framework()
 {
     korp_thread tid;
 
+<<<<<<< HEAD
     vm_thread_create(&tid,
+=======
+    os_thread_create(&tid,
+>>>>>>> intel/internal/feature
             (void *)thread_sensor_check,
             NULL,
             BH_APPLET_PRESERVED_STACK_SIZE);

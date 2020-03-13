@@ -4,8 +4,12 @@
  */
 
 #include "watchdog.h"
+<<<<<<< HEAD
 #include "bh_queue.h"
 #include "bh_thread.h"
+=======
+#include "bh_platform.h"
+>>>>>>> intel/internal/feature
 
 #define WATCHDOG_THREAD_PRIORITY 5
 
@@ -20,7 +24,11 @@ static void watchdog_timer_callback(void *timer)
 
     watchdog_timer_stop(wd_timer);
 
+<<<<<<< HEAD
     vm_mutex_lock(&wd_timer->lock);
+=======
+    os_mutex_lock(&wd_timer->lock);
+>>>>>>> intel/internal/feature
 
     if (!wd_timer->is_stopped) {
 
@@ -30,7 +38,11 @@ static void watchdog_timer_callback(void *timer)
                 sizeof(module_data));
     }
 
+<<<<<<< HEAD
     vm_mutex_unlock(&wd_timer->lock);
+=======
+    os_mutex_unlock(&wd_timer->lock);
+>>>>>>> intel/internal/feature
 }
 #endif
 
@@ -39,12 +51,20 @@ bool watchdog_timer_init(module_data *m_data)
 #ifdef WATCHDOG_ENABLED /* TODO */
     watchdog_timer *wd_timer = &m_data->wd_timer;
 
+<<<<<<< HEAD
     if (0 != vm_mutex_init(&wd_timer->lock))
+=======
+    if (0 != os_mutex_init(&wd_timer->lock))
+>>>>>>> intel/internal/feature
         return false;
 
     if (!(wd_timer->timer_handle =
                     app_manager_timer_create(watchdog_timer_callback, wd_timer))) {
+<<<<<<< HEAD
         vm_mutex_destroy(&wd_timer->lock);
+=======
+        os_mutex_destroy(&wd_timer->lock);
+>>>>>>> intel/internal/feature
         return false;
     }
 
@@ -59,20 +79,32 @@ void watchdog_timer_destroy(watchdog_timer *wd_timer)
 {
 #ifdef WATCHDOG_ENABLED /* TODO */
     app_manager_timer_destroy(wd_timer->timer_handle);
+<<<<<<< HEAD
     vm_mutex_destroy(&wd_timer->lock);
+=======
+    os_mutex_destroy(&wd_timer->lock);
+>>>>>>> intel/internal/feature
 #endif
 }
 
 void watchdog_timer_start(watchdog_timer *wd_timer)
 {
+<<<<<<< HEAD
     vm_mutex_lock(&wd_timer->lock);
+=======
+    os_mutex_lock(&wd_timer->lock);
+>>>>>>> intel/internal/feature
 
     wd_timer->is_interrupting = false;
     wd_timer->is_stopped = false;
     app_manager_timer_start(wd_timer->timer_handle,
             wd_timer->module_data->timeout);
 
+<<<<<<< HEAD
     vm_mutex_unlock(&wd_timer->lock);
+=======
+    os_mutex_unlock(&wd_timer->lock);
+>>>>>>> intel/internal/feature
 }
 
 void watchdog_timer_stop(watchdog_timer *wd_timer)

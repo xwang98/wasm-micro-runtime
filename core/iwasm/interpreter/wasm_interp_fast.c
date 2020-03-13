@@ -225,6 +225,7 @@ LOAD_I16(void *addr)
 
 #endif  /* WASM_CPU_SUPPORTS_UNALIGNED_64BIT_ACCESS != 0 */
 
+<<<<<<< HEAD
 #define CHECK_MEMORY_OVERFLOW() do {                                            \
     uint64 offset1 = offset + addr;                                             \
     /* if (flags != 2)                                                          \
@@ -250,6 +251,9 @@ LOAD_I16(void *addr)
   } while (0)
 
 #define CHECK_MEMORY_OVERFLOW_FAST(bytes) do {                                  \
+=======
+#define CHECK_MEMORY_OVERFLOW(bytes) do {                                  \
+>>>>>>> intel/internal/feature
     uint64 offset1 = offset + addr;                                             \
     /* if (flags != 2)                                                          \
       LOG_VERBOSE("unaligned load/store in wasm interp, flag: %d.\n", flags); */\
@@ -713,7 +717,12 @@ wasm_interp_call_func_native(WASMModuleInstance *module_inst,
         prev_frame->lp[prev_frame->ret_offset] = argv_ret[0];
     }
     else if (cur_func->ret_cell_num == 2) {
+<<<<<<< HEAD
         *(int64*)(prev_frame->lp + prev_frame->ret_offset) = *(int64*)argv_ret;
+=======
+        prev_frame->lp[prev_frame->ret_offset] = argv_ret[0];
+        prev_frame->lp[prev_frame->ret_offset + 1] = argv_ret[1];
+>>>>>>> intel/internal/feature
     }
 
     FREE_FRAME(exec_env, frame);
@@ -752,7 +761,11 @@ wasm_interp_call_func_native(WASMModuleInstance *module_inst,
 #endif  /* end of WASM_ENABLE_LABELS_AS_VALUES */
 
 #if WASM_ENABLE_FAST_INTERP != 0
+<<<<<<< HEAD
 static void *global_handle_table[WASM_INSTRUCTION_NUM] = { 0 };
+=======
+static void **global_handle_table;
+>>>>>>> intel/internal/feature
 #endif
 
 static void
@@ -778,10 +791,16 @@ wasm_interp_call_func_bytecode(WASMModuleInstance *module,
 #endif
   WASMGlobalInstance *global;
   uint8 *frame_ip_end;
+<<<<<<< HEAD
   uint8 opcode;
   uint32 cond, count, fidx, tidx, frame_size = 0;
   uint64 all_cell_num = 0;
   int16 addr1, addr2, addr_ret;
+=======
+  uint32 cond, count, fidx, tidx, frame_size = 0;
+  uint64 all_cell_num = 0;
+  int16 addr1, addr2, addr_ret = 0;
+>>>>>>> intel/internal/feature
   int32 didx, val;
   uint8 *maddr = NULL;
   uint32 local_idx, local_offset, global_idx;
@@ -793,19 +812,26 @@ wasm_interp_call_func_bytecode(WASMModuleInstance *module,
   #undef HANDLE_OPCODE
 #if WASM_ENABLE_FAST_INTERP != 0
   if (exec_env == NULL) {
+<<<<<<< HEAD
       bh_memcpy_s(global_handle_table, sizeof(void*) * WASM_INSTRUCTION_NUM,
                   handle_table, sizeof(void*) * WASM_INSTRUCTION_NUM);
+=======
+      global_handle_table = (void **)handle_table;
+>>>>>>> intel/internal/feature
       return;
   }
 #endif
 #endif
 
+<<<<<<< HEAD
   /* Size of memory load.
      This starts with the first memory load operator at opcode 0x28 */
   uint32 LOAD_SIZE[] = {
     4, 8, 4, 8, 1, 1, 2, 2, 1, 1, 2, 2, 4, 4,   /* loads */
     4, 8, 4, 8, 1, 2, 1, 2, 4 };                /* stores */
 
+=======
+>>>>>>> intel/internal/feature
 #if WASM_ENABLE_LABELS_AS_VALUES == 0
   while (frame_ip < frame_ip_end) {
     opcode = *frame_ip++;
@@ -1016,6 +1042,7 @@ wasm_interp_call_func_bytecode(WASMModuleInstance *module,
       HANDLE_OP (WASM_OP_I32_LOAD):
         {
           uint32 offset, addr;
+<<<<<<< HEAD
           offset = GET_OPERAND(uint32, 1);
           addr = GET_OPERAND(uint32, 3);
           frame_ip += 5;
@@ -1143,6 +1170,146 @@ wasm_interp_call_func_bytecode(WASMModuleInstance *module,
           CHECK_MEMORY_OVERFLOW_FAST(8);
           STORE_U32(maddr, frame_lp[val_offset]);
           STORE_U32(maddr + 4, frame_lp[val_offset + 1]);
+=======
+          offset = GET_OPERAND(uint32, 0);
+          addr = GET_OPERAND(uint32, 2);
+          frame_ip += 4;
+          addr_ret = GET_OFFSET();
+          CHECK_MEMORY_OVERFLOW(4);
+          frame_lp[addr_ret] = LOAD_I32(maddr);
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I64_LOAD):
+        {
+          uint32 offset, addr;
+          offset = GET_OPERAND(uint32, 0);
+          addr = GET_OPERAND(uint32, 2);
+          frame_ip += 4;
+          addr_ret = GET_OFFSET();
+          CHECK_MEMORY_OVERFLOW(8);
+          PUT_I64_TO_ADDR(frame_lp + addr_ret, LOAD_I64(maddr));
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I32_LOAD8_S):
+        {
+          uint32 offset, addr;
+          offset = GET_OPERAND(uint32, 0);
+          addr = GET_OPERAND(uint32, 2);
+          frame_ip += 4;
+          addr_ret = GET_OFFSET();
+          CHECK_MEMORY_OVERFLOW(1);
+          frame_lp[addr_ret] = sign_ext_8_32(*(int8*)maddr);
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I32_LOAD8_U):
+        {
+          uint32 offset, addr;
+          offset = GET_OPERAND(uint32, 0);
+          addr = GET_OPERAND(uint32, 2);
+          frame_ip += 4;
+          addr_ret = GET_OFFSET();
+          CHECK_MEMORY_OVERFLOW(1);
+          frame_lp[addr_ret] = (uint32)(*(uint8*)maddr);
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I32_LOAD16_S):
+        {
+          uint32 offset, addr;
+          offset = GET_OPERAND(uint32, 0);
+          addr = GET_OPERAND(uint32, 2);
+          frame_ip += 4;
+          addr_ret = GET_OFFSET();
+          CHECK_MEMORY_OVERFLOW(2);
+          frame_lp[addr_ret] = sign_ext_16_32(LOAD_I16(maddr));
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I32_LOAD16_U):
+        {
+          uint32 offset, addr;
+          offset = GET_OPERAND(uint32, 0);
+          addr = GET_OPERAND(uint32, 2);
+          frame_ip += 4;
+          addr_ret = GET_OFFSET();
+          CHECK_MEMORY_OVERFLOW(2);
+          frame_lp[addr_ret] = (uint32)(LOAD_U16(maddr));
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I64_LOAD8_S):
+        {
+          uint32 offset, addr;
+          offset = GET_OPERAND(uint32, 0);
+          addr = GET_OPERAND(uint32, 2);
+          frame_ip += 4;
+          addr_ret = GET_OFFSET();
+          CHECK_MEMORY_OVERFLOW(1);
+          *(int64 *)(frame_lp + addr_ret) = sign_ext_8_64(*(int8*)maddr);
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I64_LOAD8_U):
+        {
+          uint32 offset, addr;
+          offset = GET_OPERAND(uint32, 0);
+          addr = GET_OPERAND(uint32, 2);
+          frame_ip += 4;
+          addr_ret = GET_OFFSET();
+          CHECK_MEMORY_OVERFLOW(1);
+          *(int64 *)(frame_lp + addr_ret) = (uint64)(*(uint8*)maddr);
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I64_LOAD16_S):
+        {
+          uint32 offset, addr;
+          offset = GET_OPERAND(uint32, 0);
+          addr = GET_OPERAND(uint32, 2);
+          frame_ip += 4;
+          addr_ret = GET_OFFSET();
+          CHECK_MEMORY_OVERFLOW(2);
+          *(int64 *)(frame_lp + addr_ret) = sign_ext_16_64(LOAD_I16(maddr));
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I64_LOAD16_U):
+        {
+          uint32 offset, addr;
+          offset = GET_OPERAND(uint32, 0);
+          addr = GET_OPERAND(uint32, 2);
+          frame_ip += 4;
+          addr_ret = GET_OFFSET();
+          CHECK_MEMORY_OVERFLOW(2);
+          *(int64 *)(frame_lp + addr_ret) = (uint64)(LOAD_U16(maddr));
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I64_LOAD32_S):
+        {
+          uint32 offset, addr;
+          offset = GET_OPERAND(uint32, 0);
+          addr = GET_OPERAND(uint32, 2);
+          frame_ip += 4;
+          addr_ret = GET_OFFSET();
+          CHECK_MEMORY_OVERFLOW(4);
+          *(int64 *)(frame_lp + addr_ret) = sign_ext_32_64(LOAD_I32(maddr));
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I64_LOAD32_U):
+        {
+          uint32 offset, addr;
+          offset = GET_OPERAND(uint32, 0);
+          addr = GET_OPERAND(uint32, 2);
+          frame_ip += 4;
+          addr_ret = GET_OFFSET();
+          CHECK_MEMORY_OVERFLOW(4);
+          *(int64 *)(frame_lp + addr_ret) = (uint64)(LOAD_U32(maddr));
+>>>>>>> intel/internal/feature
           HANDLE_OP_END ();
         }
 
@@ -1150,6 +1317,7 @@ wasm_interp_call_func_bytecode(WASMModuleInstance *module,
         {
           uint32 offset, addr;
           uint32 sval;
+<<<<<<< HEAD
           offset = GET_OPERAND(uint32, 1);
           sval = GET_OPERAND(uint32, 3);
           addr = GET_OPERAND(uint32, 5);
@@ -1159,15 +1327,43 @@ wasm_interp_call_func_bytecode(WASMModuleInstance *module,
           HANDLE_OP_END ();
         }
       HANDLE_OP (WASM_OP_I32_STORE8):
-      HANDLE_OP (WASM_OP_I32_STORE16):
-        {
-          uint32 offset, addr;
-          uint32 sval;
-          GET_OPCODE();
+=======
           offset = GET_OPERAND(uint32, 0);
           sval = GET_OPERAND(uint32, 2);
           addr = GET_OPERAND(uint32, 4);
           frame_ip += 6;
+          CHECK_MEMORY_OVERFLOW(4);
+          STORE_U32(maddr, sval);
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I32_STORE8):
+        {
+          uint32 offset, addr;
+          uint32 sval;
+          offset = GET_OPERAND(uint32, 0);
+          sval = GET_OPERAND(uint32, 2);
+          addr = GET_OPERAND(uint32, 4);
+          frame_ip += 6;
+          CHECK_MEMORY_OVERFLOW(1);
+          *(uint8*)maddr = (uint8)sval;
+          HANDLE_OP_END ();
+        }
+
+>>>>>>> intel/internal/feature
+      HANDLE_OP (WASM_OP_I32_STORE16):
+        {
+          uint32 offset, addr;
+          uint32 sval;
+<<<<<<< HEAD
+          GET_OPCODE();
+=======
+>>>>>>> intel/internal/feature
+          offset = GET_OPERAND(uint32, 0);
+          sval = GET_OPERAND(uint32, 2);
+          addr = GET_OPERAND(uint32, 4);
+          frame_ip += 6;
+<<<<<<< HEAD
           CHECK_MEMORY_OVERFLOW();
           switch (opcode) {
             case WASM_OP_I32_STORE8:
@@ -1177,21 +1373,70 @@ wasm_interp_call_func_bytecode(WASMModuleInstance *module,
               STORE_U16(maddr, (uint16)sval);
               break;
           }
+=======
+          CHECK_MEMORY_OVERFLOW(2);
+          STORE_U16(maddr, (uint16)sval);
+>>>>>>> intel/internal/feature
           HANDLE_OP_END ();
         }
 
       HANDLE_OP (WASM_OP_I64_STORE):
+<<<<<<< HEAD
       HANDLE_OP (WASM_OP_I64_STORE8):
       HANDLE_OP (WASM_OP_I64_STORE16):
-      HANDLE_OP (WASM_OP_I64_STORE32):
+=======
         {
           uint32 offset, addr;
           uint64 sval;
-          GET_OPCODE();
           offset = GET_OPERAND(uint32, 0);
           sval = GET_OPERAND(uint64, 2);
           addr = GET_OPERAND(uint32, 4);
           frame_ip += 6;
+          CHECK_MEMORY_OVERFLOW(8);
+          STORE_I64(maddr, sval);
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I64_STORE8):
+        {
+          uint32 offset, addr;
+          uint64 sval;
+          offset = GET_OPERAND(uint32, 0);
+          sval = GET_OPERAND(uint64, 2);
+          addr = GET_OPERAND(uint32, 4);
+          frame_ip += 6;
+          CHECK_MEMORY_OVERFLOW(1);
+          *(uint8*)maddr = (uint8)sval;
+          HANDLE_OP_END ();
+        }
+
+      HANDLE_OP (WASM_OP_I64_STORE16):
+        {
+          uint32 offset, addr;
+          uint64 sval;
+          offset = GET_OPERAND(uint32, 0);
+          sval = GET_OPERAND(uint64, 2);
+          addr = GET_OPERAND(uint32, 4);
+          frame_ip += 6;
+          CHECK_MEMORY_OVERFLOW(2);
+          STORE_U16(maddr, (uint16)sval);
+          HANDLE_OP_END ();
+        }
+
+>>>>>>> intel/internal/feature
+      HANDLE_OP (WASM_OP_I64_STORE32):
+        {
+          uint32 offset, addr;
+          uint64 sval;
+<<<<<<< HEAD
+          GET_OPCODE();
+=======
+>>>>>>> intel/internal/feature
+          offset = GET_OPERAND(uint32, 0);
+          sval = GET_OPERAND(uint64, 2);
+          addr = GET_OPERAND(uint32, 4);
+          frame_ip += 6;
+<<<<<<< HEAD
           CHECK_MEMORY_OVERFLOW();
           switch (opcode) {
             case WASM_OP_I64_STORE:
@@ -1207,6 +1452,10 @@ wasm_interp_call_func_bytecode(WASMModuleInstance *module,
               STORE_U32(maddr, (uint32)sval);
               break;
           }
+=======
+          CHECK_MEMORY_OVERFLOW(4);
+          STORE_U32(maddr, (uint32)sval);
+>>>>>>> intel/internal/feature
           HANDLE_OP_END ();
         }
 
@@ -1232,7 +1481,11 @@ wasm_interp_call_func_bytecode(WASMModuleInstance *module,
           /* fail to memory.grow, return -1 */
           frame_lp[addr_ret] = -1;
           if (wasm_get_exception(module)) {
+<<<<<<< HEAD
             bh_printf("%s\n", wasm_get_exception(module));
+=======
+            os_printf("%s\n", wasm_get_exception(module));
+>>>>>>> intel/internal/feature
             wasm_set_exception(module, NULL);
           }
         }
@@ -2085,6 +2338,13 @@ wasm_interp_call_func_bytecode(WASMModuleInstance *module,
     HANDLE_OP (WASM_OP_UNUSED_0x26):
     HANDLE_OP (WASM_OP_UNUSED_0x27):
     /* optimized op code */
+<<<<<<< HEAD
+=======
+    HANDLE_OP (WASM_OP_F32_STORE):
+    HANDLE_OP (WASM_OP_F64_STORE):
+    HANDLE_OP (WASM_OP_F32_LOAD):
+    HANDLE_OP (WASM_OP_F64_LOAD):
+>>>>>>> intel/internal/feature
     HANDLE_OP (EXT_OP_GET_LOCAL_FAST):
     HANDLE_OP (WASM_OP_GET_LOCAL):
     HANDLE_OP (WASM_OP_F64_CONST):

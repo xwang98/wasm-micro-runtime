@@ -1401,7 +1401,11 @@ wasm_interp_call_func_bytecode(WASMModuleInstance *module,
           /* fail to memory.grow, return -1 */
           PUSH_I32(-1);
           if (wasm_get_exception(module)) {
+<<<<<<< HEAD
             bh_printf("%s\n", wasm_get_exception(module));
+=======
+            os_printf("%s\n", wasm_get_exception(module));
+>>>>>>> intel/internal/feature
             wasm_set_exception(module, NULL);
           }
         }

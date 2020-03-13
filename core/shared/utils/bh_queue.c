@@ -4,6 +4,7 @@
  */
 
 #include "bh_queue.h"
+<<<<<<< HEAD
 #include "bh_thread.h"
 #include "bh_time.h"
 #include "bh_common.h"
@@ -11,6 +12,12 @@
 typedef struct _bh_queue_node {
     struct _bh_queue_node * next;
     struct _bh_queue_node * prev;
+=======
+
+typedef struct bh_queue_node {
+    struct bh_queue_node * next;
+    struct bh_queue_node * prev;
+>>>>>>> intel/internal/feature
     unsigned short tag;
     unsigned int len;
     void * body;

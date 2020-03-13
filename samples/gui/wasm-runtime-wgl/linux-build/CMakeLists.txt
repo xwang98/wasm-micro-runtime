@@ -24,6 +24,11 @@ link_directories(${WAMR_ROOT_DIR}/wamr-sdk/out/gui/runtime-sdk/lib)
 include_directories(
     ${WAMR_ROOT_DIR}/wamr-sdk/out/gui/runtime-sdk/include
     ${WAMR_ROOT_DIR}/wamr-sdk/out/gui/runtime-sdk/include/bi-inc/deps
+<<<<<<< HEAD
+=======
+    ${WAMR_ROOT_DIR}/core/shared/utils
+    ${WAMR_ROOT_DIR}/core/shared/platform/${WAMR_BUILD_PLATFORM}
+>>>>>>> intel/internal/feature
 )
 
 ################  application related  ################

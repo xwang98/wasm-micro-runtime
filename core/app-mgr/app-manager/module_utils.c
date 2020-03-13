@@ -5,8 +5,12 @@
 
 #include "app_manager.h"
 #include "app_manager_host.h"
+<<<<<<< HEAD
 #include "bh_queue.h"
 #include "bh_thread.h"
+=======
+#include "bh_platform.h"
+>>>>>>> intel/internal/feature
 #include "bi-inc/attr_container.h"
 #include "event.h"
 #include "watchdog.h"
@@ -21,13 +25,21 @@ module_data *module_data_list;
 bool module_data_list_init()
 {
     module_data_list = NULL;
+<<<<<<< HEAD
     return !vm_mutex_init(&module_data_list_lock) ? true : false;
+=======
+    return !os_mutex_init(&module_data_list_lock) ? true : false;
+>>>>>>> intel/internal/feature
 }
 
 void module_data_list_destroy()
 {
 
+<<<<<<< HEAD
     vm_mutex_lock(&module_data_list_lock);
+=======
+    os_mutex_lock(&module_data_list_lock);
+>>>>>>> intel/internal/feature
     if (module_data_list) {
         while (module_data_list) {
             module_data *p = module_data_list->next;
@@ -35,14 +47,23 @@ void module_data_list_destroy()
             module_data_list = p;
         }
     }
+<<<<<<< HEAD
     vm_mutex_unlock(&module_data_list_lock);
     vm_mutex_destroy(&module_data_list_lock);
+=======
+    os_mutex_unlock(&module_data_list_lock);
+    os_mutex_destroy(&module_data_list_lock);
+>>>>>>> intel/internal/feature
 }
 
 static void module_data_list_add(module_data *m_data)
 {
     static uint32 module_id_max = 1;
+<<<<<<< HEAD
     vm_mutex_lock(&module_data_list_lock);
+=======
+    os_mutex_lock(&module_data_list_lock);
+>>>>>>> intel/internal/feature
     // reserve some special ID
     // TODO: check the new id is not already occupied!
     if (module_id_max == 0xFFFFFFF0)
@@ -55,12 +76,20 @@ static void module_data_list_add(module_data *m_data)
         m_data->next = module_data_list;
         module_data_list = m_data;
     }
+<<<<<<< HEAD
     vm_mutex_unlock(&module_data_list_lock);
+=======
+    os_mutex_unlock(&module_data_list_lock);
+>>>>>>> intel/internal/feature
 }
 
 void module_data_list_remove(module_data *m_data)
 {
+<<<<<<< HEAD
     vm_mutex_lock(&module_data_list_lock);
+=======
+    os_mutex_lock(&module_data_list_lock);
+>>>>>>> intel/internal/feature
     if (module_data_list) {
         if (module_data_list == m_data)
             module_data_list = module_data_list->next;
@@ -74,46 +103,74 @@ void module_data_list_remove(module_data *m_data)
                 p->next = p->next->next;
         }
     }
+<<<<<<< HEAD
     vm_mutex_unlock(&module_data_list_lock);
+=======
+    os_mutex_unlock(&module_data_list_lock);
+>>>>>>> intel/internal/feature
 }
 
 module_data*
 module_data_list_lookup(const char *module_name)
 {
+<<<<<<< HEAD
     vm_mutex_lock(&module_data_list_lock);
+=======
+    os_mutex_lock(&module_data_list_lock);
+>>>>>>> intel/internal/feature
     if (module_data_list) {
         module_data *p = module_data_list;
 
         while (p) {
             /* Search by module name */
             if (!strcmp(module_name, p->module_name)) {
+<<<<<<< HEAD
                 vm_mutex_unlock(&module_data_list_lock);
+=======
+                os_mutex_unlock(&module_data_list_lock);
+>>>>>>> intel/internal/feature
                 return p;
             }
             p = p->next;
         }
     }
+<<<<<<< HEAD
     vm_mutex_unlock(&module_data_list_lock);
+=======
+    os_mutex_unlock(&module_data_list_lock);
+>>>>>>> intel/internal/feature
     return NULL;
 }
 
 module_data*
 module_data_list_lookup_id(unsigned int module_id)
 {
+<<<<<<< HEAD
     vm_mutex_lock(&module_data_list_lock);
+=======
+    os_mutex_lock(&module_data_list_lock);
+>>>>>>> intel/internal/feature
     if (module_data_list) {
         module_data *p = module_data_list;
 
         while (p) {
             /* Search by module name */
             if (module_id == p->id) {
+<<<<<<< HEAD
                 vm_mutex_unlock(&module_data_list_lock);
+=======
+                os_mutex_unlock(&module_data_list_lock);
+>>>>>>> intel/internal/feature
                 return p;
             }
             p = p->next;
         }
     }
+<<<<<<< HEAD
     vm_mutex_unlock(&module_data_list_lock);
+=======
+    os_mutex_unlock(&module_data_list_lock);
+>>>>>>> intel/internal/feature
     return NULL;
 }
 
@@ -201,7 +258,11 @@ void release_module(module_data *m_data)
 
 int check_modules_timer_expiry()
 {
+<<<<<<< HEAD
     vm_mutex_lock(&module_data_list_lock);
+=======
+    os_mutex_lock(&module_data_list_lock);
+>>>>>>> intel/internal/feature
     module_data *p = module_data_list;
     int ms_to_expiry = -1;
 
@@ -215,7 +276,11 @@ int check_modules_timer_expiry()
 
         p = p->next;
     }
+<<<<<<< HEAD
     vm_mutex_unlock(&module_data_list_lock);
+=======
+    os_mutex_unlock(&module_data_list_lock);
+>>>>>>> intel/internal/feature
     return ms_to_expiry;
 }
 
