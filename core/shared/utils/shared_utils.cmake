@@ -4,15 +4,8 @@
 set (UTILS_SHARED_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 include_directories(${UTILS_SHARED_DIR})
-<<<<<<< HEAD
-include_directories(${UTILS_SHARED_DIR}/../include)
-
-
-file (GLOB_RECURSE source_all ${UTILS_SHARED_DIR}/*.c)
-=======
 
 file (GLOB source_all ${UTILS_SHARED_DIR}/*.c)
->>>>>>> intel/internal/feature
 
 set (UTILS_SHARED_SOURCE ${source_all})
 
